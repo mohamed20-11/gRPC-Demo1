@@ -9,7 +9,7 @@ service ToDoIt {
 	rpc CreateToDo(CreateToDoRequest) returns (CreateToDoResponse){}
 
 	//Reading Single
-	rpc ReadToDO(ReadToDoRequest) returns(ReadToDoResponse) {}
+	rpc ReadToDo(ReadToDoRequest) returns(ReadToDoResponse) {}
 
 	//Reading List
 	rpc ListToDo(GetAllRequest) returns(GetAllResponse){}
