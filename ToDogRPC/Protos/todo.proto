@@ -19,7 +19,7 @@ service ToDoIt {
 
 
 	//Updating
-	//rpc UpdateToDo(UpdateToDoRequest) returns (UpdateToDoResponse) {}
+	rpc UpdateToDo(UpdateToDoRequest) returns (UpdateToDoResponse) {}
 
 }
 

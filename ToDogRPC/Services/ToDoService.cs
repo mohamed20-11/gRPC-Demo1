@@ -54,5 +54,45 @@ namespace ToDogRPC.Services
             }
             throw new RpcException(new Status(StatusCode.NotFound, $"No task with this id {request.Id}"));
         }
+        public override async Task<GetAllResponse> ListToDo(GetAllRequest request, ServerCallContext context)
+        {
+            var response = new GetAllResponse();
+            var toDoItem = await _toDoContext.ToDoItems.ToListAsync();
+            foreach(var toDo in  toDoItem)
+            {
+                response.ToDo.Add(new ReadToDoResponse
+                {
+                    Id = toDo.Id,
+                    Title=toDo.Title,
+                    Description=toDo.Description,
+                    ToDoStatus=toDo.ToDoStatus
+                });
+            }
+            return await Task.FromResult(response);
+        }
+        
+        public override async Task<UpdateToDoResponse> UpdateToDo(UpdateToDoRequest request, ServerCallContext context)
+        {
+            if(request.Id<=0 ||request.Title==string.Empty || request.Description==string.Empty)
+            {
+                throw new RpcException(new Status(StatusCode.InvalidArgument, "Not Valid"));
+
+            }
+
+            var todoItems= await _toDoContext.ToDoItems.FirstOrDefaultAsync(t=>t.Id==request.Id);
+            if(todoItems==null)
+            {
+                throw new RpcException(new Status(StatusCode.NotFound, $"No task with this id {request.Id}"));
+            }
+            todoItems.Title=request.Title;
+            todoItems.Description=request.Description;
+            todoItems.ToDoStatus=request.ToDoStatus;
+            await _toDoContext.SaveChangesAsync();
+            return await Task.FromResult(new UpdateToDoResponse
+            {
+                Id = request.Id
+            });
+        }
+
     }
 }
